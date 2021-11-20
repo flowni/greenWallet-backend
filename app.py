@@ -114,10 +114,10 @@ def get_purchase_details(purchase_id):
     return response
 
 @app.route("/product_info/<product_id>")
-def get_purchase_details(purchase_id):
+def get_product_info(product_id):
     conn = mysql.connect()
     cursor = conn.cursor()
-    cursor.execute(queries.purchase_details_query_1.format(purchase_id))
+    cursor.execute(queries.product_info_query.format(product_id))
     data = cursor.fetchone()
     data = {k:v for (k,v) in zip(utils.products_columns, data)}
 

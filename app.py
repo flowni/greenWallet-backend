@@ -55,7 +55,7 @@ def get_purchases_of_user(user_id):
     data = cursor.fetchall()
     return app.response_class(response=json.dumps(data),
     status=200,
-    mimetype='application/json'))
+    mimetype='application/json')
 
 @app.route("/users")
 def get_users():

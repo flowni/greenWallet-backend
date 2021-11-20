@@ -3,6 +3,16 @@ from flaskext.mysql import MySQL
 import os
 import json
 import queries
+from decimal import Decimal
+import datetime
+
+class DataEncoder(json.JSONEncoder):
+  def default(self, obj):
+    if isinstance(obj, Decimal):
+      return str(round(obj,4))
+    elif isinstance(obj, datetime.datetime):
+      return str(obj)
+    return json.JSONEncoder.default(self, obj)
 # from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -53,7 +63,8 @@ def get_purchases_of_user(user_id):
     cursor = conn.cursor()
     cursor.execute(queries.all_purchases_query.format(user_id))
     data = cursor.fetchall()
-    return app.response_class(response=json.dumps(data),
+    print(data)
+    return app.response_class(response=json.dumps(data, cls=DataEncoder),
     status=200,
     mimetype='application/json')
 
@@ -94,7 +105,7 @@ def get_purchase_details(purchase_id):
              "coins_earned":x[4]} for x in data]
     result['products'] = data
 
-    response = app.response_class(response=json.dumps(result),
+    response = app.response_class(response=json.dumps(result, cls=DataEncoder),
                                 status=200,
                                 mimetype='application/json')
     return response

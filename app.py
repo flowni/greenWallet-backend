@@ -2,6 +2,7 @@ from flask import Flask
 from flaskext.mysql import MySQL
 import os
 import json
+import queries
 # from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -11,6 +12,8 @@ app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD')
 app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB')
 app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST')
 mysql.init_app(app)
+
+conn = mysql.connect()
 
 @app.route("/")
 def hello():
@@ -23,16 +26,20 @@ def checkout_purchase_from_store():
     # update tables
     return
 
-@app.route("/purchases/:user_id")
+@app.route("/purchases/all/:user_id")
 def get_purchases_of_user(user_id):
     # return all purchases of a user
-    return
+    cursor = conn.cursor()
+    cursor.execute(queries.all_purchases_query.format(user_id))
+    data = cursor.fetchall()
+    return app.response_class(response=json.dumps(data,
+    status=200,
+    mimetype='application/json'))
 
 @app.route("/users")
 def get_users():
     print("read: " + os.getenv('MYSQL_DATABASE_PASSWORD'))
     # return all users
-    conn = mysql.connect()
     cursor = conn.cursor()
 
     cursor.execute("select * from users")

@@ -53,7 +53,7 @@ def get_purchases_of_user(user_id):
     cursor = conn.cursor()
     cursor.execute(queries.all_purchases_query.format(user_id))
     data = cursor.fetchall()
-    return app.response_class(response=json.dumps(data,
+    return app.response_class(response=json.dumps(data),
     status=200,
     mimetype='application/json'))
 
@@ -79,7 +79,7 @@ def get_purchase_details(purchase_id):
     cursor.execute(queries.purchase_details_query_1.format(purchase_id))
     data = cursor.fetchone()
     result = {
-        "purchase_time":data[0],
+        "purchase_time":str(data[0]),
         "partner_id":data[1],
         "partner_name":data[2],
         "total_amount":data[3],

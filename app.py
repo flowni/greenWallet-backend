@@ -12,7 +12,7 @@ app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD')
 app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB')
 app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST')
 mysql.init_app(app)
-conn = mysql.connect()
+
 
 @app.route("/")
 def hello():
@@ -52,6 +52,7 @@ def get_purchases_of_user(user_id):
 
 @app.route("/users")
 def get_users():
+    conn = mysql.connect()
     # return all users
     cursor = conn.cursor()
     cursor.execute("select * from users")

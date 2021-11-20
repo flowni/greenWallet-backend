@@ -71,3 +71,30 @@ def get_users():
 
     return response
 
+
+@app.route("/purchase_details/:purchase_id")
+def get_purchase_details(purchase_id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute(queries.purchase_details_query_1.format(purchase_id))
+    data = cursor.fetchone()
+    result = {
+        "purchase_time":data[0],
+        "partner_id":data[1],
+        "partner_name":data[2],
+        "total_amount":data[3],
+        "total_coins_earned":data[4] 
+    }
+    cursor.execute(queries.purchase_details_query_2.format(purchase_id))
+    data = cursor.fetchall()
+    data = [{"product_id":x[0],
+             "product_name":x[1],
+             "quantity": x[2],
+             "total_amount":x[3],
+             "coins_earned":x[4]} for x in data]
+    result['products'] = data
+
+    response = app.response_class(response=json.dumps(result),
+                                status=200,
+                                mimetype='application/json')
+    return response

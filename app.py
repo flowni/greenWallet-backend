@@ -2,7 +2,7 @@ from flask import Flask, redirect, url_for, render_template
 from flaskext.mysql import MySQL
 import os
 import json
-
+import queries
 # from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -49,7 +49,13 @@ def get_user_details(user_id):
 @app.route("/purchases/:user_id")
 def get_purchases_of_user(user_id):
     # return all purchases of a user
-    return
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute(queries.all_purchases_query.format(user_id))
+    data = cursor.fetchall()
+    return app.response_class(response=json.dumps(data,
+    status=200,
+    mimetype='application/json'))
 
 @app.route("/users")
 def get_users():

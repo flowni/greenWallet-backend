@@ -2,7 +2,7 @@ from flask import Flask
 from flaskext.mysql import MySQL
 import os
 import json
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 app = Flask(__name__)
 mysql = MySQL()

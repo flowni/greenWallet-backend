@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, render_template
 from flaskext.mysql import MySQL
 import os
 import json
+
 # from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -42,7 +43,7 @@ def get_user_details(user_id):
                                 status=200,
                                 mimetype='application/json')
     return response
-    
+
 
 @app.route("/purchases/:user_id")
 def get_purchases_of_user(user_id):

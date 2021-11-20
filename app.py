@@ -26,6 +26,7 @@ def checkout_purchase_from_store():
 
 @app.route("/user/<user_id>")
 def get_user_details(user_id):
+    conn = mysql.connect()
     cursor = conn.cursor()
     cursor.execute("select * from users where id = {}".format(user_id))
     data = cursor.fetchone()

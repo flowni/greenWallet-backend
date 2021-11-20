@@ -33,3 +33,8 @@ products
 on product_id = products.id
 where purchase_product.purchase_id = {}
 """
+
+product_info_query = """
+select * from products
+where id = {}
+"""

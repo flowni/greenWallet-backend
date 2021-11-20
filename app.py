@@ -5,6 +5,7 @@ import json
 import queries
 from decimal import Decimal
 import datetime
+import utils
 
 class DataEncoder(json.JSONEncoder):
   def default(self, obj):
@@ -13,6 +14,8 @@ class DataEncoder(json.JSONEncoder):
     elif isinstance(obj, datetime.datetime):
       return str(obj)
     return json.JSONEncoder.default(self, obj)
+
+
 # from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -106,6 +109,19 @@ def get_purchase_details(purchase_id):
     result['products'] = data
 
     response = app.response_class(response=json.dumps(result, cls=DataEncoder),
+                                status=200,
+                                mimetype='application/json')
+    return response
+
+@app.route("/product_info/<product_id>")
+def get_purchase_details(purchase_id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute(queries.purchase_details_query_1.format(purchase_id))
+    data = cursor.fetchone()
+    data = {k:v for (k,v) in zip(utils.products_columns, data)}
+
+    response = app.response_class(response=json.dumps(data, cls=DataEncoder),
                                 status=200,
                                 mimetype='application/json')
     return response

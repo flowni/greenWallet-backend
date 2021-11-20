@@ -46,7 +46,7 @@ def get_user_details(user_id):
     return response
 
 
-@app.route("/purchases/:user_id")
+@app.route("/purchases/<user_id>")
 def get_purchases_of_user(user_id):
     # return all purchases of a user
     conn = mysql.connect()
@@ -72,7 +72,7 @@ def get_users():
     return response
 
 
-@app.route("/purchase_details/:purchase_id")
+@app.route("/purchase_details/<purchase_id>")
 def get_purchase_details(purchase_id):
     conn = mysql.connect()
     cursor = conn.cursor()

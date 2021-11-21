@@ -158,7 +158,8 @@ def get_purchase_details(purchase_id):
              "product_name":x[1],
              "quantity": x[2],
              "total_amount":x[3],
-             "coins_earned":x[4]} for x in data]
+             "coins_earned":x[4],
+             "image_url": x[5]} for x in data]
     result['products'] = data
 
     response = app.response_class(response=json.dumps(result, cls=DataEncoder),

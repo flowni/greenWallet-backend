@@ -27,8 +27,8 @@ on partner_id=partners.id
 where purchases.id={}
 """
 purchase_details_query_2 = """
-select product_id, product_name , qty, amount, coins_earned from
-purchase_product
+select product_id, product_name , qty, amount, coins_earned, image 
+from purchase_product
 left join
 products
 on product_id = products.id

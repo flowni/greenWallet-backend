@@ -6,7 +6,7 @@ import queries
 from decimal import Decimal
 import datetime
 import utils
-import requests
+
 
 
 class DataEncoder(json.JSONEncoder):

@@ -50,7 +50,7 @@ def checkout_purchase_from_store():
     ucoins_lifetime = user[1]
     ubalance = user[2]
     #recording the transaction details in purchases
-    cursor.execute(queries.insert_purchase_query.format(uid,content['purchase_time'],
+    cursor.execute(queries.insert_purchases_query.format(uid,content['purchase_time'],
     content['partner_id']))
     purchase_id = cursor.lastrowid                        
     

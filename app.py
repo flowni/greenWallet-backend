@@ -47,6 +47,7 @@ def checkout_purchase_from_store():
                                 mimetype='application/json')
 
     uid = user[0]
+    print(f"user:{uid}")
     ucoins_lifetime = user[1]
     ubalance = user[2]
     #recording the transaction details in purchases
@@ -54,12 +55,13 @@ def checkout_purchase_from_store():
     content['partner_id']))
     purchase_id = cursor.lastrowid                        
     
+    print(f"purchase_id:{purchase_id}")
     # calculating total amounts, coins earned and updating purchase_product_mapping
     # total_amount = 0
     total_coins = 0
     for product in content["products"]:
         barcode = product["barcode"]
-        cursor.execute(queries.search_user_with_barcode.format(barcode))
+        cursor.execute(queries.search_product_with_barcode.format(barcode))
         p = cursor.fetchone()
         if p is None:
             print(f"Barcode {barcode} doesn't exist in database, skipping product")

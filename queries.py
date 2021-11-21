@@ -46,7 +46,7 @@ where barcode = {}"""
 
 insert_purchases_query = """
 insert into purchases(user_id, purchase_time,partner_id)
-values({},{},{})
+values({},'{}',{})
 """
 insert_purchase_product_query = """
 insert into purchase_product(purchase_id, product_id, qty, amount, coins_earned)

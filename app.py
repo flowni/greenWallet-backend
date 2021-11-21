@@ -73,7 +73,8 @@ def get_purchases_of_user(user_id):
              "partner_id": x[2],
              "partner_name":x[3],
              "total_amount":x[4],
-             "total_coins":x[5]} for x in data]
+             "total_coins":x[5],
+             "partner_icon_url":x[6]} for x in data]
     return app.response_class(response=json.dumps(data, cls=DataEncoder),
     status=200,
     mimetype='application/json')

@@ -36,7 +36,52 @@ def hello():
 @app.route("/purchase/", methods=['POST'])
 def checkout_purchase_from_store():
     content = request.json
-    print(content)
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute(queries.search_user_with_barcode.format(content["membership_no"]))
+    user = cursor.fetchone()
+    if user is None:
+        response = app.response_class(response=jsonify({"error":"Customer not found"}),
+                                status=403,
+                                mimetype='application/json')
+
+    uid = user[0]
+    ucoins_lifetime = user[1]
+    ubalance = user[2]
+    #recording the transaction details in purchases
+    cursor.execute(queries.insert_purchase_query.format(uid,content['purchase_time'],
+    content['partner_id']))
+    purchase_id = cursor.lastrowid                        
+    
+    # calculating total amounts, coins earned and updating purchase_product_mapping
+    # total_amount = 0
+    total_coins = 0
+    for product in content["products"]:
+        barcode = product["barcode"]
+        cursor.execute(queries.search_user_with_barcode.format(barcode))
+        p = cursor.fetchone()
+        if p is None:
+            print(f"Barcode {barcode} doesn't exist in database, skipping product")
+            continue
+        p_id = p[0]
+        product_score = utils.calculate_green_score(barcode)
+        coins_earned = round(product['amount']*product_score)
+        total_coins += coins_earned
+        # total_amount += product['amount']
+        cursor.execute(queries.insert_purchase_product_query.format(purchase_id,
+                            p_id,
+                            product['product_qty'],
+                            product['amount'],
+                            coins_earned))
+
+    #update user coinss
+    ubalance = ubalance + total_coins
+    ucoins_lifetime += total_coins
+
+    cursor.execute(queries.update_user_coins.format(ucoins_lifetime, ubalance, uid))
+
+
     return jsonify({"status":"received"})
 
 @app.route("/user/<user_id>")

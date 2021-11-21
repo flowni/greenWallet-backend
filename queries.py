@@ -27,7 +27,7 @@ on partner_id=partners.id
 where purchases.id={}
 """
 purchase_details_query_2 = """
-select * from
+select product_id, product_name , qty, amount, coins_earned from
 purchase_product
 left join
 products
@@ -39,3 +39,26 @@ product_info_query = """
 select * from products
 where id = {}
 """
+
+search_user_with_barcode = """
+select id,total_coins_earned,balance from users
+where barcode = {}"""
+
+insert_purchases_query = """
+insert into purchases(user_id, purchase_time,partner_id)
+values({},{},{})
+"""
+insert_purchase_product_query = """
+insert into purchase_product(purchase_id, product_id, qty, amount, coins_earned)
+values({},{},{},{},{})
+"""
+
+search_product_with_barcode = """
+select id from products
+where barcode={}
+"""
+
+update_user_coins = """
+update users
+set total_coins_earned = {}, balance={}
+where id={} """

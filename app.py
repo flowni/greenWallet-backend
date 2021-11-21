@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, jsonify, render_template, request
 from flaskext.mysql import MySQL
 import os
 import json
@@ -33,11 +33,11 @@ mysql.init_app(app)
 def hello():
     return render_template("index.html")
 
-@app.route("/purchase")
+@app.route("/purchase/", methods=['POST'])
 def checkout_purchase_from_store():
-    # receive a json, barcodes and quantities, user_id
-    # update tables
-    return
+    content = request.json
+    print(content)
+    return jsonify({"status":"received"})
 
 @app.route("/user/<user_id>")
 def get_user_details(user_id):

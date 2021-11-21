@@ -6,6 +6,8 @@ import queries
 from decimal import Decimal
 import datetime
 import utils
+import requests
+
 
 class DataEncoder(json.JSONEncoder):
   def default(self, obj):
@@ -125,6 +127,7 @@ def get_product_info(product_id):
     cursor.execute(queries.product_info_query.format(product_id))
     data = cursor.fetchone()
     data = {k:v for (k,v) in zip(utils.products_columns, data)}
+    data['green_score']= utils.calculate_green_score(data["barcode"])
 
     response = app.response_class(response=json.dumps(data, cls=DataEncoder),
                                 status=200,

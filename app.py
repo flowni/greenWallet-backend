@@ -66,7 +66,12 @@ def get_purchases_of_user(user_id):
     cursor = conn.cursor()
     cursor.execute(queries.all_purchases_query.format(user_id))
     data = cursor.fetchall()
-    print(data)
+    data = [{"purchase_id":x[0],
+             "product_time":x[1],
+             "partner_id": x[2],
+             "partner_name":x[3],
+             "total_amount":x[4],
+             "total_coins":x[5]} for x in data]
     return app.response_class(response=json.dumps(data, cls=DataEncoder),
     status=200,
     mimetype='application/json')

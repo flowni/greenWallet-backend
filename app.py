@@ -82,7 +82,7 @@ def checkout_purchase_from_store():
     ucoins_lifetime += total_coins
 
     cursor.execute(queries.update_user_coins.format(ucoins_lifetime, ubalance, uid))
-
+    conn.commit()
 
     return jsonify({"status":"received"})
 
